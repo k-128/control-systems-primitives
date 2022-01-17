@@ -25,3 +25,4 @@ smbus2
 
 *Resources*
 - Specs: [01](<https://learn.adafruit.com/adafruit-bmp388-bmp390-bmp3xx>), [02](<http://www.cqrobot.wiki/index.php/BMP388_Barometric_Pressure_Sensor_SKU:_AngelBMP388US>)
+- [Most used baud rates table](<https://lucidar.me/en/serialib/most-used-baud-rates-table/>)
