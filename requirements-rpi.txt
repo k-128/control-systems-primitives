@@ -1,0 +1,11 @@
+pigpio  # requires daemon running: `sudo pigpiod`
+RPi.GPIO
+gpiozero
+smbus2
+picamera
+adafruit-circuitpython-ads1x15
+adafruit-circuitpython-tcs34725
+
+# ssd1306
+adafruit-circuitpython-ssd1306
+pillow
