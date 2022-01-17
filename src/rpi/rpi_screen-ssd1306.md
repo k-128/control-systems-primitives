@@ -25,6 +25,7 @@ adafruit-circuitpython-ssd1306
 <br />
 
 *Resources*
+- Specs: [01](<https://cdn-shop.adafruit.com/datasheets/SSD1306.pdf>)
 - [Wiring](<https://learn.adafruit.com/monochrome-oled-breakouts/python-wiring>)
 - [Examples](<https://github.com/adafruit/Adafruit_CircuitPython_SSD1306/tree/main/examples>)
 - [Pillow docs](<https://pillow.readthedocs.io/en/stable/reference/ImageDraw.html>)

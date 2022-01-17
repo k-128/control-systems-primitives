@@ -24,6 +24,7 @@ smbus2
 <br />
 
 *Resources*
+- Specs: [01](<https://www.sparkfun.com/datasheets/LCD/GDM2004D.pdf>)
 - [RPi i2c lcd set up and programming](<https://www.circuitbasics.com/raspberry-pi-i2c-lcd-set-up-and-programming/>)
 - [RPi i2c driver](<https://gist.github.com/DenisFromHR/cc863375a6e19dce359d>)
 - [Most used baud rates table](<https://lucidar.me/en/serialib/most-used-baud-rates-table/>)
