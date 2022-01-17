@@ -171,3 +171,63 @@ cat /var/log/syslog | grep "Time has been changed"
 ```
 
 <br />
+
+*WLAN*
+```sh
+# Setup
+# -----------------------------------------------------------------------------
+sudo apt install hostapd dnsmasq
+sudo systemctl enable --now dnsmasq
+
+sudo cp /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
+# Edit: /etc/dnsmasq.conf
+interface=wlan0
+except-interface=eth0
+dhcp-range=192.168.1.96,192.168.1.255,255.255.255.0,24h  # IP rng, DNS mask
+dhcp-option=3,192.168.1.1  # Gateway IP address
+dhcp-option=6,192.168.1.1  # DNS server address
+
+# If net conf managed by dhcpcd (recent Raspbian)
+sudo cp /etc/dhcpcd.conf /etc/dhcpcd.conf.orig
+# Edit: /etc/dhcpcd.conf
+#denyinterfaces wlan0  # To ignore wireless interface
+interface wlan0
+static ip_address=192.168.1.20/24
+nohook wpa_supplicant  # Will be done with hostapd
+
+# Create: /etc/hostapd/hostapd.conf
+interface=wlan0
+driver=nl80211             # Driver
+channel=6                  # 
+hw_mode=g                  # Hardware mode: g=wireless
+ssid=ssid                  # Network name
+wpa=2                      # WPA Version, 3: both 1 and 2
+wpa_passphrase=password    # 
+wpa_key_mgmt=WPA-PSK       # 
+wpa_pairwise=TKIP          # WPA encryption
+rsn_pairwise=CCMP          # WPA2 encryption
+country_code=x             # See raspi-config
+auth_algs=1                # 1: Only sys auth; 2: Sys & shared key auth
+ignore_broadcast_ssid=1    # 1: Hidden Wi-Fi (no ssid broadcast)
+macaddr_acl=0              # MAC addr filtering; 0: Accept unless in deny list
+# To use:
+sudo /usr/sbin/hostapd /etc/hostapd/hostapd.conf
+# To set as default, edit: /etc/default/hostapd
+DAEMON_CONF="/etc/hostapd/hostapd.conf"
+
+# Exec examples
+# -----------------------------------------------------------------------------
+sudo systemctl unmask hostapd
+sudo systemctl enable hostapd
+sudo systemctl start hostapd
+sudo service dnsmasq start
+sudo service --status-all
+sudo update-rc.d dnsmasq enable
+sudo update-rc.d hostapd enable
+
+# Custom conf
+hostapd path/to/hostapd.conf
+dnsmasq -C path/to/dnsmasq.conf
+```
+
+<br />
