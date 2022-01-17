@@ -3,15 +3,17 @@
 
 <br />
 
-```py
+```ts
 └── rpi
-    ├── rpi_ads1115
+    ├── rpi-ads1115
     ├── rpi_screen-lcd
     ├── rpi_screen-ssd1306
     ├── rpi_sen-bmp388
+    ├── rpi_sen-ctcwtr_cqr
     ├── rpi_sen-dht
     ├── rpi_sen-ds18b20
-    └── rpi_sen-tcs34725
+    ├── rpi_sen-tcs34725
+    └── rpi_sen-tds_cqr
 ```
 
 <br />
