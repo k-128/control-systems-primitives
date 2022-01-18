@@ -4,16 +4,20 @@
 <br />
 
 ```ts
+src
+├── data
+│   ├── db_sensors.py
+│   └── db_server.py
 └── rpi
-    ├── rpi-ads1115
-    ├── rpi_screen-lcd
-    ├── rpi_screen-ssd1306
-    ├── rpi_sen-bmp388
-    ├── rpi_sen-ctcwtr_cqr
-    ├── rpi_sen-dht
-    ├── rpi_sen-ds18b20
-    ├── rpi_sen-tcs34725
-    └── rpi_sen-tds_cqr
+    ├── rpi-ads1115.py
+    ├── rpi_screen-lcd.py
+    ├── rpi_screen-ssd1306.py
+    ├── rpi_sen-bmp388.py
+    ├── rpi_sen-ctcwtr_cqr.py
+    ├── rpi_sen-dht.py
+    ├── rpi_sen-ds18b20.py
+    ├── rpi_sen-tcs34725.py
+    └── rpi_sen-tds_cqr.py
 ```
 
 <br />

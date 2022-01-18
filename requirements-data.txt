@@ -1,0 +1,17 @@
+# db_sensors
+aiosqlite
+apscheduler
+
+# db_server
+databases[sqlite]
+SQLAlchemy
+starlette
+uvicorn
+#aiofiles           # FileResponse, StaticFiles support
+#jinja2             # Jinja2Templates support
+#python-multipart   # Form parsing support, with request.form()
+#itsdangerous       # SessionMiddleware support
+pyyaml              # SchemaGenerator support
+#websockets         # WebSocketRoute support
+#graphene           # GraphQLApp support
+requests            # TestClient support
