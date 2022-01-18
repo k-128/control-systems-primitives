@@ -20,6 +20,7 @@
 
 *Resources*
 - Diagrams: [circuit-diagram.org](<https://www.circuit-diagram.org/editor/>), [circuito.io](<https://www.circuito.io/>)
+- Db: [sqlitebrowser](<https://github.com/sqlitebrowser/sqlitebrowser>)
 
 <br />
 
@@ -106,8 +107,8 @@ chmod 600 ~/.ssh/authorized_keys
 ssh-copy-id <user>@<ip_addr>
 
 # File transfers
-scp /path/to/orig <user>@<ip_addr>:/path/to/dest  # A to B
-scp <user>@<ip_addr>:/path/to/orig /path/to/dest  # B to A
+scp -P <port> /path/to/orig <user>@<ip/host>:/path/to/dest  # A to B
+scp -P <port> <user>@<ip/host>:/path/to/orig /path/to/dest  # B to A
 rsync -rvz --no-perms -e "ssh -p 80" --filter=":- .gitignore" --exclude="venv/" path/to/orig <user>@<ip_addr>:path/to/dest/
 # -r: recursive
 # -v: verbose
