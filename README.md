@@ -5,6 +5,9 @@
 
 ```ts
 src
+├── arduino
+│   ├── dht22
+│   └── esp_ap-dht22
 ├── data
 │   ├── db_sensors.py
 │   └── db_server.py
