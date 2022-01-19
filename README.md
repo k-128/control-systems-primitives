@@ -7,12 +7,14 @@
 src
 ├── arduino
 │   ├── dht22
-│   └── esp_ap-dht22
+│   └── esp8266_ap-dht22
 ├── data
 │   ├── db_sensors.py
-│   └── db_server.py
+│   ├── db_server.py
+│   └── logger.py
 └── rpi
     ├── rpi-ads1115.py
+    ├── rpi-gpio.py
     ├── rpi_screen-lcd.py
     ├── rpi_screen-ssd1306.py
     ├── rpi_sen-bmp388.py
@@ -28,6 +30,7 @@ src
 *Resources*
 - Diagrams: [circuit-diagram.org](<https://www.circuit-diagram.org/editor/>), [circuito.io](<https://www.circuito.io/>)
 - Db: [sqlitebrowser](<https://github.com/sqlitebrowser/sqlitebrowser>)
+- Scheduling: [crontab.guru](<https://crontab.guru/>)
 
 <br />
 

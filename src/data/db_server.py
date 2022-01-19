@@ -10,6 +10,7 @@ import logging
 from pathlib import Path
 from datetime import datetime as dt
 from random import random, randint
+from typing import Literal
 
 import databases
 import sqlalchemy
@@ -210,7 +211,7 @@ class TestsClient:
             self.log.error(f"err: {r.status_code}: {r.content}")
         self.log.debug(f"Schema.get[{r.status_code}]")
 
-    def test_endpoints(self, test: str) -> None:
+    def test_endpoints(self, test: Literal["GET", "POST"]) -> None:
         if test == "GET":
             r = c.get("/sensors")
             if r.status_code != 200:
