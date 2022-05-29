@@ -7,7 +7,7 @@
  *  - Boards:
  *    - ESP8266
  *  - Libs:
- *    - Adafruit DHT sensor library
+ *    - DHT sensor library by Adafruit: github.com/adafruit/DHT-sensor-library
 */
 
 #include <DHT.h>
@@ -16,26 +16,18 @@
 #include <ESP8266WebServer.h>
 
 
-/**
- * DHT22
- */
-#define DHTPIN    2       // Digital pin connected to the DHT sensor
-#define DHTTYPE   DHT22   // DHT 22 (AM2302)
-
-DHT dht(DHTPIN, DHTTYPE);
-
-
-/**
- * Server
- */
-#ifndef AP_SSID
-#define AP_SSID "ssid"
-#define AP_SK   "password"
-#endif
-
-const char* ssid         = AP_SSID;
-const char* password     = AP_SK;
+// Cfg
+// ----------------------------------------------------------------------------
+const uint8_t dht_type  = DHT22;  // DHT.h: DHT11, DHT12, DHT21, DHT22, AM2301
+const uint8_t dht_pin   = 2;
+const char* ssid        = "ap_ssid";
+const char* password    = "ap_password";
 const IPAddress ip_addr(192, 168, 4, 1);
+
+
+// Server
+// ----------------------------------------------------------------------------
+DHT dht(dht_pin, dht_type);
 
 ESP8266WebServer server(ip_addr, 80);
 
@@ -59,9 +51,8 @@ void handle_root() {
 }
 
 
-/**
- * Execution
- */
+// Execution
+// ----------------------------------------------------------------------------
 void setup() {
   delay(1000);
 
