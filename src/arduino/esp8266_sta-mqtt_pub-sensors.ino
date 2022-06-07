@@ -41,8 +41,8 @@ const char* mqtt_user     = "";
 const char* mqtt_password = "";
 const char* topic         = "";
 
-const uint32_t pub_interval = 2000;  // ms
-unsigned long prevMillis    = 0;
+const uint32_t loop_ms = 2000;
+unsigned long prev_ms  = 0;
 
 
 // Exec
@@ -111,12 +111,10 @@ void setup()
 
 void loop()
 {
-  mqttClient.poll();  // Keepalive: avoids being disconnected by the broker
-
-  unsigned long currMillis = millis();
-  if (currMillis - prevMillis >= pub_interval)
+  unsigned long curr_ms = millis();
+  if (curr_ms - prev_ms >= loop_ms)
   {
-    prevMillis = currMillis;
+    prev_ms = curr_ms;
     publish_data();
   }
 }
