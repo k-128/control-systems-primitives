@@ -35,7 +35,7 @@ unsigned long prev_ms  = 0;
 // ----------------------------------------------------------------------------
 void publish_data()
 {
-  long v = random(300);
+  const long v = random(300);
   String json_string = "{\"v\":";
   json_string += v;
   json_string += "}";

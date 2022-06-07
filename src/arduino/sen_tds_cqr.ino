@@ -41,6 +41,7 @@ float get_tds_cqr_value(const float temperature = 25.0)
 void setup()
 {
   Serial.begin(115200);
+  Serial.println();
 
   ads.setGain(GAIN_TWOTHIRDS);  // (dflt) +-6.144 V
   if (!ads.begin())

@@ -54,20 +54,20 @@ unsigned long prev_ms  = 0;
 // ----------------------------------------------------------------------------
 float get_tds_cqr_value(const float temperature = 25.0)
 {
-  float compens_coef = 0.02 * (temperature - 25.0) + 1.0;
-  int16_t adc = ads.readADC_SingleEnded(ads_tds_idx);
-  float v     = ads.computeVolts(adc) / compens_coef;
-  float tds = (133.42 * pow(v, 3) - 255.86 * pow(v, 2) + 857.39 * v) / 2;
+  const float compens_coef = 0.02 * (temperature - 25.0) + 1.0;
+  const int16_t adc = ads.readADC_SingleEnded(ads_tds_idx);
+  const float v = ads.computeVolts(adc) / compens_coef;
+  const float tds = (133.42 * pow(v, 3) - 255.86 * pow(v, 2) + 857.39 * v) / 2;
   return tds;
 }
 
 void publish_data()
 {
   sen_ds18b20.requestTemperatures();
-  float temp_hydr = sen_ds18b20.getTempCByIndex(0);
-  float rh        = sen_dht.readHumidity();     // Relative humidity (%)
-  float temp      = sen_dht.readTemperature();  // Temperature (Celsius)
-  float tds       = get_tds_cqr_value(temp_hydr);
+  const float temp_hydr = sen_ds18b20.getTempCByIndex(0);
+  const float rh        = sen_dht.readHumidity();     // Relative humidity (%)
+  const float temp      = sen_dht.readTemperature();  // Temperature (Celsius)
+  const float tds       = get_tds_cqr_value(temp_hydr);
 
   String json_string = "{\"temp_hydr\":";
   json_string += temp_hydr;
@@ -92,7 +92,6 @@ void publish_data()
 void setup()
 {
   Serial.begin(115200);
-  while (!Serial);
   Serial.println();
 
   // Sensors

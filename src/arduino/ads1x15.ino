@@ -57,6 +57,7 @@ void read_ads_values()
 void setup()
 {
   Serial.begin(115200);
+  println();
 
   ads.setGain(GAIN_TWOTHIRDS);  // (dflt) +-6.144 V
   if (!ads.begin())

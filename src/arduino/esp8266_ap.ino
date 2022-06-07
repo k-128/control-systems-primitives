@@ -33,7 +33,7 @@ ESP8266WebServer server(80);
 // ----------------------------------------------------------------------------
 void handle_root()
 {
-  long v = random(300);
+  const long v = random(300);
   String json_string = "{\"v\":";
   json_string += v;
   json_string += "}";
@@ -48,7 +48,6 @@ void handle_root()
 // ----------------------------------------------------------------------------
 void setup()
 {
-  delay(1000);
   Serial.begin(115200);
   Serial.println();
 

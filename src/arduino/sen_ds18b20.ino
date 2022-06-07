@@ -25,13 +25,14 @@ const uint32_t delay_ms = 1000;   // Delay between measurements
 void setup()
 {
   Serial.begin(115200);
+  Serial.println();
   sen_ds18b20.begin();
 }
 
 void loop()
 {
   sen_ds18b20.requestTemperatures();
-  float temp = sen_ds18b20.getTempCByIndex(0);  // Idx for n OneWire sensors
+  const float temp = sen_ds18b20.getTempCByIndex(0);  // Idx: n OneWire sensors
 
   String json_string = "{\"temp\":";
   json_string += temp;

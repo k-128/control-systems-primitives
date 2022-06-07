@@ -42,8 +42,8 @@ ESP8266WebServer server(80);
 // ----------------------------------------------------------------------------
 void handle_text()
 {
-  float rh    = sen_dht.readHumidity();     // Relative humidity (%)
-  float temp  = sen_dht.readTemperature();  // Temperature (Celsius)
+  const float rh    = sen_dht.readHumidity();     // Relative humidity (%)
+  const float temp  = sen_dht.readTemperature();  // Temperature (Celsius)
 
   Serial.print(F("Recv. query text, sending DHT data:\t"));
   Serial.print(F("temp: "));
@@ -61,8 +61,8 @@ void handle_text()
 
 void handle_json()
 {
-  float rh    = sen_dht.readHumidity();     // Relative humidity (%)
-  float temp  = sen_dht.readTemperature();  // Temperature (Celsius)
+  const float rh    = sen_dht.readHumidity();     // Relative humidity (%)
+  const float temp  = sen_dht.readTemperature();  // Temperature (Celsius)
 
   String json_string = "{\"temp\":";
   json_string += temp;
@@ -76,8 +76,8 @@ void handle_json()
 
 void handle_json_2()
 {
-  float rh    = sen_dht.readHumidity();     // Relative humidity (%)
-  float temp  = sen_dht.readTemperature();  // Temperature (Celsius)
+  const float rh    = sen_dht.readHumidity();     // Relative humidity (%)
+  const float temp  = sen_dht.readTemperature();  // Temperature (Celsius)
 
   const int capacity = JSON_OBJECT_SIZE(2);
   StaticJsonDocument<capacity> doc;
@@ -95,7 +95,6 @@ void handle_json_2()
 // ----------------------------------------------------------------------------
 void setup()
 {
-  delay(1000);
   Serial.begin(115200);
   Serial.println();
 
