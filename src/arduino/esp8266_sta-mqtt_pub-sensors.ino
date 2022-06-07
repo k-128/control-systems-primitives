@@ -6,12 +6,14 @@
  * - Additional board management URLs:
  *   - https://arduino.esp8266.com/stable/package_esp8266com_index.json
  * - Libs:
- *   - DHT sensor library by Adafruit: github.com/adafruit/DHT-sensor-library
+ *   - Adafruit ADS1X15 by Adafruit: github.com/adafruit/Adafruit_ADS1X15
  *   - OneWire by Paul Stoffregen: github.com/PaulStoffregen/OneWire
  *   - DallasTemperature by Miles Burton: github.com/milesburton/Arduino-Temperature-Control-Library
+ *   - DHT sensor library by Adafruit: github.com/adafruit/DHT-sensor-library
  *   - ArduinoMqttClient by Arduino: github.com/arduino-libraries/ArduinoMqttClient
 */
 
+#include <Adafruit_ADS1X15.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <DHT.h>
@@ -21,6 +23,9 @@
 
 // Cfg
 // ----------------------------------------------------------------------------
+Adafruit_ADS1115 ads; // (Adafruit_ADS1015|Adafruit_ADS1115)
+const uint8_t ads_tds_idx = 0;
+
 const uint8_t one_wire_bus = D3;  // i: GPIO or Di, ex: D4 (common onboard LED)
 OneWire oneWire(one_wire_bus);
 DallasTemperature sen_ds18b20(&oneWire);
@@ -47,12 +52,22 @@ unsigned long prev_ms  = 0;
 
 // Exec
 // ----------------------------------------------------------------------------
+float get_tds_cqr_value(const float temperature = 25.0)
+{
+  float compens_coef = 0.02 * (temperature - 25.0) + 1.0;
+  int16_t adc = ads.readADC_SingleEnded(ads_tds_idx);
+  float v     = ads.computeVolts(adc) / compens_coef;
+  float tds = (133.42 * pow(v, 3) - 255.86 * pow(v, 2) + 857.39 * v) / 2;
+  return tds;
+}
+
 void publish_data()
 {
   sen_ds18b20.requestTemperatures();
   float temp_hydr = sen_ds18b20.getTempCByIndex(0);
   float rh        = sen_dht.readHumidity();     // Relative humidity (%)
   float temp      = sen_dht.readTemperature();  // Temperature (Celsius)
+  float tds       = get_tds_cqr_value(temp_hydr);
 
   String json_string = "{\"temp_hydr\":";
   json_string += temp_hydr;
@@ -60,6 +75,8 @@ void publish_data()
   json_string += temp;
   json_string += ",\"rh\":";
   json_string += rh;
+  json_string += ",\"tds\":";
+  json_string += tds;
   json_string += "}";
 
   Serial.print(F("Publishing sensors data [topic: "));
@@ -78,7 +95,14 @@ void setup()
   while (!Serial);
   Serial.println();
 
-  // Sensor
+  // Sensors
+  ads.setGain(GAIN_TWOTHIRDS);  // (dflt) +-6.144 V
+  if (!ads.begin())
+  {
+    Serial.println("Failed to initialize ADS.");
+    while (1);
+  }
+  sen_ds18b20.begin();
   sen_dht.begin();
 
   // Server
