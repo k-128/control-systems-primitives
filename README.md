@@ -6,13 +6,16 @@
 ```ts
 └── src
     ├── arduino
+    │   ├── ads1x15.ino
     │   ├── esp8266_ap.ino
     │   ├── esp8266_ap-sen_dht.ino
     │   ├── esp8266_sta.ino
     │   ├── esp8266_sta-mqtt_pub.ino
     │   ├── esp8266_sta-mqtt_pub-sensors.ino
+    │   ├── sen_bmp388.ino
     │   ├── sen_dht.ino
-    │   └── sen_ds18b20.ino
+    │   ├── sen_ds18b20.ino
+    │   └── sen_tds_cqr.ino
     ├── data
     │   ├── db_sensors.py
     │   ├── db_server.py
