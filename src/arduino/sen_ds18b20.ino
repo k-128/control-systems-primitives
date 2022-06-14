@@ -32,7 +32,9 @@ void setup()
 void loop()
 {
   sen_ds18b20.requestTemperatures();
-  const float temp = sen_ds18b20.getTempCByIndex(0);  // Idx: n OneWire sensors
+
+  // getTempCByIndex (slow, see .h), (idx: n OneWire sensors)
+  const float temp = sen_ds18b20.getTempCByIndex(0);
 
   String json_string = "{\"temp\":";
   json_string += temp;

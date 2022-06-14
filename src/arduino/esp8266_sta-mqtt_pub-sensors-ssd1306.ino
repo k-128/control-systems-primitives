@@ -31,37 +31,37 @@
 // Cfg
 // ----------------------------------------------------------------------------
 // Sensors
-const float   kSenErrorValue = -273.15;
+const float     kSenErrorValue = -273.15;
 
 Adafruit_ADS1115 ads;  // Adafruit_ADS1X15.h: Adafruit_ADS1015|Adafruit_ADS1115
-const uint8_t kAdsTdsIdx  = 0;
-const uint8_t kAdsPhIdx   = 1;
-const uint8_t kOneWireBus = D3;     // i: GPIO or Di, ex: D4 (common board LED)
-const uint8_t kDhtPin     = D5;
-const uint8_t kDhtType    = DHT22;  // DHT.h: DHT11|DHT12|DHT21|DHT22|AM2301
-const uint8_t kCtcWtrPin  = D6;
+const uint8_t   kAdsTdsIdx  = 0;
+const uint8_t   kAdsPhIdx   = 1;
+const uint8_t   kOneWireBus = D3;     // i|Di, ex: D4, common board LED
+const uint8_t   kDhtPin     = D5;
+const uint8_t   kDhtType    = DHT22;  // DHT.h: DHT11|DHT12|DHT21|DHT22|AM2301
+const uint8_t   kCtcWtrPin  = D6;
 
 // Display
-const uint8_t kDisplayWidth     = 128;
-const uint8_t kDisplayHeight    = 64;
-const int8_t  kDisplayOledReset = -1;
-const uint8_t kDisplayAddress   = 0x3C;  // (0x3C|0x3D)
+const uint8_t   kDisplayWidth     = 128;
+const uint8_t   kDisplayHeight    = 64;
+const int8_t    kDisplayOledReset = -1;
+const uint8_t   kDisplayAddress   = 0x3C;  // (0x3C|0x3D)
 
 // Server
-const char*   kApSsid       = "";
-const char*   kApPassword   = "";
-const char*   kMqttHost     = "";
-const uint    kMqttPort     = 1883;
-const char*   kMqttClientID = "";
-const char*   kMqttUser     = "";
-const char*   kMqttPassword = "";
-const char*   kMqttTopic    = "";
+const char*     kApSsid       = "";
+const char*     kApPassword   = "";
+const char*     kMqttHost     = "";
+const uint16_t  kMqttPort     = 1883;
+const char*     kMqttClientID = "";
+const char*     kMqttUser     = "";
+const char*     kMqttPassword = "";
+const char*     kMqttTopic    = "";
 
 // Exec
-const uint8_t  kPinLedInputOpMode   = D4;
-const uint8_t  kPinBtnInputOpMode   = D8;
-const uint32_t kInputOpModeDuration = 3000; // ms
-const uint32_t kLoopInterval        = 2000; // ms
+const uint8_t   kPinLedInputOpMode   = D4;
+const uint8_t   kPinBtnInputOpMode   = D8;
+const uint32_t  kInputOpModeDuration = 3000; // ms
+const uint32_t  kLoopInterval        = 2000; // ms
 
 
 // Exec
