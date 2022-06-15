@@ -3,15 +3,12 @@
 
 <br />
 
-*Wireless Access Point - Routed*
-- Secondary wireless network managed by the AP
-- The AP will route to and from the ethernet network
+*./src/set_routed_wap.sh*
+- Set a Wireless Access Point routing to eth0 using IP masquerading
+- If RPi, set localisation with:
 
 ```sh
-# Set localisation, if rpi:
-sudo raspi-config
-# - Localisation Options -> WLAN Country
-./src/set_routed_wap.sh
+sudo raspi-config  # - Localisation Options -> WLAN Country
 ```
 
 <br />
