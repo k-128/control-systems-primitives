@@ -8,7 +8,7 @@ set -o pipefail  # Exit if non-zero exit code, ...
 
 readonly SCRIPT_NAME="${0##*/}"
 readonly PATH_DIR=$(dirname $(readlink -f $0))
-readonly PATH_FILES="${PATH_DIR}/../bin"
+readonly PATH_FILES="${PATH_DIR}/../bin/conf"
 
 source "${PATH_DIR}/utils.sh"
 LOG_LVL=1
@@ -18,42 +18,95 @@ readonly GIT_RAW="https://raw.githubusercontent.com"
 readonly GIT_DHCPCD="${GIT_RAW}/NetworkConfiguration/dhcpcd/master"
 readonly GIT_DNSMASQ="${GIT_RAW}/imp/dnsmasq/master"
 
+
+function display_help()
+{
+  printf "\n"
+  print_underlined "Help"
+  printf "Set a Wireless Access Point routing to eth0 using IP masquerading.\n"
+  printf "\n"
+  printf "Options:\n"
+  printf "\t-h \t\tDisplay this help message.\n"
+  printf "\t-v \t\tMore verbose output\n"
+  printf "\t-s \"ssid\"\tAccess Point SSID\n"
+  printf "\t-p \"password\"\tAccess Point password\n"
+  printf "\t-c \"CC\"\t\tWLAN Country Code\n"
+  printf "\n"
+  print_underlined "Examples"
+  printf "./${SCRIPT_NAME}\n"
+  printf "./${SCRIPT_NAME} -v\n"
+  printf "./${SCRIPT_NAME} -s \"Access Point 1\" -p \"123456\" -c \"CH\"\n"
+  printf "./${SCRIPT_NAME} -s \"Access Point 1\" -c \"RU\"\n"
+  printf "\n"
+  print_underlined "Warning"
+  printf "This script overwrites:\n"
+  printf "+ /etc/dhcpcd.conf\n"
+  printf "+ /etc/dhcpcd.conf.orig\n"
+  printf "+ /etc/dnsmasq.conf\n"
+  printf "+ /etc/dnsmasq.conf.orig\n"
+  printf ".orig files downloaded directly from respective gits default conf.\n"
+  printf "This script removes duplicate iptables rules.\n"
+  printf "If needed, do the required backups before running.\n"
+  printf "\n"
+}
+
+
 function main()
 {
-  log_dbg "Full path: ${PATH_DIR}/${SCRIPT_NAME}\n"
-
-  print_title "Warning"
-  log_inf "This script will overwrite:"
-  log_inf "- /etc/dhcpcd.conf"
-  log_inf "- /etc/dhcpcd.conf.orig"
-  log_inf "- /etc/dnsmasq.conf"
-  log_inf "- /etc/dnsmasq.conf.orig"
-  log_inf ".orig files will be downloaded directly from each respective gits."
-  log_inf "This script will also remove duplicate iptables rules."
-  log_inf "If needed, backup files before continuing."
-  input_yes_or_no "Continue?" "Y"
-
   # cfg.
   # ---------------------------------------------------------------------------
-  print_title "Access Point configuration"
-  read -p "Enter AP SSID:`echo $'\n> '`" ap_ssid
-  read -sp "Enter AP password:`echo $'\n> '`" ap_password; echo ""
-  read -p "Enter AP country code:`echo $'\n> '`" ap_country_code
-  log_dbg "ssid: $ap_ssid, passwd: $ap_password, cc: $ap_country_code"
+  local ap_ssid=""
+  local ap_password=""
+  local ap_country_code=""
+
+  local OPTIND=1  # Reset getopts OPTIND
+  while getopts ":hvs:p:c:" flag; do
+    case "${flag}" in
+      h)
+        display_help
+        exit 0
+        ;;
+      v)
+        LOG_LVL=2
+        log_dbg "Script path: ${PATH_DIR}/${SCRIPT_NAME}"
+        ;;
+      s) ap_ssid="${OPTARG}" ;;
+      p) ap_password="${OPTARG}" ;;
+      c) ap_country_code="${OPTARG}" ;;
+      *)
+        printf "Unsupported option: ${flag}\n\n"
+        display_help
+        exit 1
+        ;;
+    esac
+  done
+
+  if [[ -z $ap_ssid ]]; then
+    read -p "Enter AP SSID:`echo $'\n> '`" ap_ssid
+  fi
+
+  if [[ -z $ap_password ]]; then
+    read -sp "Enter AP password:`printf $'\n> '`" ap_password; echo ""
+  fi
+
+  if [[ -z $ap_country_code ]]; then
+    read -p "Enter AP country code:`printf $'\n> '`" ap_country_code
+  fi
 
   # exec.
   # ---------------------------------------------------------------------------
-  print_title "Setting up routed WAP..."
-  log_inf "Installing ${REQ_PKGS[*]}... "
+  printf "\n"
+  print_underlined "Setting up routed WAP..."
+  log_inf "Installing ${REQ_PKGS[*]}"
   install_packages ${REQ_PKGS[@]}
 
   log_inf "Configuring hostapd..."
   sudo cp "${PATH_FILES}/hostapd_routed_ap.conf" /etc/hostapd/
   hostapd_conf="/etc/hostapd/hostapd_routed_ap.conf"
-  set_cfg_file_key_value $hostapd_conf ssid "$ap_ssid"
-  set_cfg_file_key_value $hostapd_conf wpa_passphrase "$ap_password"
-  set_cfg_file_key_value $hostapd_conf country_code "$ap_country_code"
-  set_cfg_file_key_value /etc/default/hostapd DAEMON_CONF "\"$hostapd_conf\""
+  set_cfg_file_key_value "${hostapd_conf}" ssid "$ap_ssid"
+  set_cfg_file_key_value "${hostapd_conf}" wpa_passphrase "$ap_password"
+  set_cfg_file_key_value "${hostapd_conf}" country_code "$ap_country_code"
+  set_cfg_file_key_value /etc/default/hostapd DAEMON_CONF "\"${hostapd_conf}\""
 
   log_inf "Configuring dhcpcd..."
   sudo wget -qO /etc/dhcpcd.conf.orig "${GIT_DHCPCD}/src/dhcpcd.conf"
@@ -83,10 +136,10 @@ function main()
   sudo service hostapd restart &> /dev/null
 
   log_inf "Routed WAP set:"
-  log_inf "- SSID: $ap_ssid"
+  log_inf "- SSID: ${ap_ssid}"
   log_inf "- Router's IP: 192.168.4.1/24, to edit: /etc/dhcpcd.conf"
   log_inf "- Listening interface: wlan0, to edit: /etc/dnsmasq.conf"
   log_inf "- Routes to eth0 using IP masquerading, to edit: iptables"
 }
 
-main
+main "$@"

@@ -12,3 +12,8 @@ sudo raspi-config  # - Localisation Options -> WLAN Country
 ```
 
 <br />
+
+*./src/set_ssh_server.sh*
+- Set secured SSH server
+
+<br />

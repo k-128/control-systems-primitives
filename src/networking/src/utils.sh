@@ -123,18 +123,18 @@ export -f log_dbg
 
 #######################################
 # Arguments:
-# - str         : Title
+# - str
 # Outputs:
-# - Writes underlined title to stdout
+# - Writes underlined str to stdout
 #######################################
-function print_title()
+function print_underlined()
 {
-  printf "\n$1\n"
+  printf "$1\n"
   printf -- "-%.0s" $(seq 0 $(expr ${#1} - 1))
   printf "\n"
 }
 
-export -f print_title
+export -f print_underlined
 
 
 # Utils
@@ -164,7 +164,7 @@ get_array_value()
 #######################################
 function get_cfg_file_value_from_key()
 {
-  sed -rn "s/^$0=([^\n]+)$/\1/p" $1
+  sed -rn "s/^${0}=([^\n]+)$/\1/p" "${1}"
 }
 
 #######################################
@@ -173,33 +173,43 @@ function get_cfg_file_value_from_key()
 # - str         : File path
 # - str         : Target key
 # - str         : Value
+# - str (opt.)  : Separator, default: '='
 #######################################
 function set_cfg_file_key_value()
 {
-  local -r file=$1
-  local -r key=$2
-  local -r value=$3
+  local -r file="$1"
+  local -r key="$2"
+  local -r value="$3"
+  [[ $# -eq 4 ]] && local -r sep="$4" || local -r sep="="
 
-  if ! grep -R "^[#]*\s*${key}=.*" $file > /dev/null; then
+  if ! grep -R "^[#]*\s*${key}${sep}.*" "${file}" 1>/dev/null; then
     # Key not found, append:
-    printf "$key=$value" >> $file
+    printf "${key}${sep}${value}" >> "${file}"
   else
     # Update key
-    sudo sed -ir "s|^[#]*\s*${key}=.*|${key}=${value}|" $file
+    sudo sed -ir "s|^[#]*\s*${key}${sep}.*|${key}${sep}${value}|" "${file}"
   fi
 }
 
 #######################################
-# Install given packages while suppressing apt output
+# Look for a package manager and install given packages with it
 # Arguments:
 # - array str   : Packages
 #######################################
 function install_packages()
 {
-  sudo apt install $@ -yq &> /dev/null
-  if [[ $? != 0 ]]; then
-    printf "Error installing $@, exiting.\n"
-    exit 1
+  if [[ -x "$(command -v apk)" ]]; then
+    sudo apk add --no-cache $@ &>/dev/null
+  elif [[ -x "$(command -v apt)" ]]; then
+    sudo apt install -yq $@ &>/dev/null
+  elif [[ -x "$(command -v dnf)" ]]; then
+    sudo dnf install -yq $@ &>/dev/null
+  elif [[ -x "$(command -v yum)" ]]; then
+    sudo yum install -y $@ &>/dev/null
+  elif [[ -x "$(command -v pacman)" ]]; then
+    sudo pacman --noconfirm -S $@ &>/dev/null
+  else
+    printf "Package manager not found, manual installation required.\n"
   fi
 }
 
@@ -235,4 +245,16 @@ function delete_duplicate_iptables_rules()
   if [ -f $tmp_file ]; then
     rm $tmp_file
   fi
+}
+
+#######################################
+# Add font
+# Arguments
+# - str         : Font location
+#######################################
+function add_font()
+{
+  local -r fonts_path=~/.local/share/fonts/
+  mkdir -p $fonts_path
+  cp "$1" $fonts_path
 }
