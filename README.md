@@ -1,8 +1,6 @@
 # Control Systems Primitives
 ---
 
-<br />
-
 ```ts
 └── src
     ├── arduino
@@ -36,6 +34,7 @@
     ├── networking
     │   └── src
     │       ├── set_routed_wap.sh
+    │       ├── set_ssh_server.sh
     │       └── utils.sh
     └── rpi
         ├── rpi-ads1115.py
